@@ -4,6 +4,10 @@
     <option name="filePathToZoomLevelMap">
       <map>
         <entry key="app/src/main/res/layout/activity_landmark.xml" value="0.907258064516129" />
+        <entry key="app/src/main/res/layout/activity_landmark_list.xml" value="0.1" />
+        <entry key="app/src/main/res/layout/card_landmark.xml" value="0.1" />
+        <entry key="app/src/main/res/menu/menu_landmark.xml" value="0.1" />
+        <entry key="app/src/main/res/menu/menu_main.xml" value="0.1" />
       </map>
     </option>
   </component>
