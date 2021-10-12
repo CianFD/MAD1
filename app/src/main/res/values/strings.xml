@@ -1,6 +1,8 @@
 <resources>
-    <string name="app_name">IrishLandmarks</string>
+    <string name="app_name">Historical Landmarks of Ireland</string>
     <string name="button_addLandmark">Add Landmark</string>
     <string name="hint_landmarkTitle">Landmark Title</string>
     <string name="hint_landmarkDescription">Description </string>
+    <string name="menu_addLandmark">Add</string>
+    <string name="menu_cancelLandmarkAdd">Cancel</string>
 </resources>
