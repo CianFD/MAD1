@@ -17,32 +17,42 @@ class LandmarkActivity : AppCompatActivity() {
     var landmark = LandmarkModel()
     lateinit var app: MainApp
 
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         binding = ActivityLandmarkBinding.inflate(layoutInflater)
         setContentView(binding.root)
+        var edit = false
 
         binding.toolbarAdd.title = title
         setSupportActionBar(binding.toolbarAdd)
 
         app = application as MainApp
         i("Landmark App boot...")
+
+        if (intent.hasExtra("landmark_edit")) {
+            edit = true
+            landmark = intent.extras?.getParcelable("landmark_edit")!!
+            binding.landmarkTitle.setText(landmark.title)
+            binding.description.setText(landmark.description)
+            binding.btnAdd.setText(R.string.save_landmark)
+        }
+
         binding.btnAdd.setOnClickListener() {
             landmark.title = binding.landmarkTitle.text.toString()
             landmark.description = binding.description.text.toString()
-            if (landmark.title.isNotEmpty()) {
-                app.landmarks.add(landmark.copy())
-                i("add Button Pressed: ${landmark}")
-                for (i in app.landmarks.indices) {
-                    i("Landmark[$i]:${this.app.landmarks[i]}")
-                }
-                setResult(RESULT_OK)
-                finish()
-            }
-            else {
-                Snackbar.make(it,"Please Enter a title", Snackbar.LENGTH_LONG)
+            if (landmark.title.isEmpty()) {
+                Snackbar.make(it,R.string.enter_landmark_title, Snackbar.LENGTH_LONG)
                     .show()
+            } else {
+                if (edit) {
+                    app.landmarks.update(landmark.copy())
+                } else {
+                    app.landmarks.create(landmark.copy())
+                }
             }
+            setResult(RESULT_OK)
+            finish()
         }
     }
 
