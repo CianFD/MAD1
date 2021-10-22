@@ -1,7 +1,8 @@
-package org.wit.landmark
+package org.wit.landmark.helpers
 
 import android.content.Intent
 import androidx.activity.result.ActivityResultLauncher
+import org.wit.landmark.R
 
 fun showImagePicker(intentLauncher : ActivityResultLauncher<Intent>) {
 

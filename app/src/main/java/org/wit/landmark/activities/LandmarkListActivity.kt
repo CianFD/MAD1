@@ -32,7 +32,7 @@ class LandmarkListActivity : AppCompatActivity(), LandmarkListener {
 
         val layoutManager = LinearLayoutManager(this)
         binding.recyclerView.layoutManager = layoutManager
-        binding.recyclerView.adapter = LandmarkAdapter(app.landmarks.findAll(),this)
+        loadLandmarks()
 
         registerRefreshCallback()
     }
@@ -61,6 +61,15 @@ class LandmarkListActivity : AppCompatActivity(), LandmarkListener {
     private fun registerRefreshCallback() {
         refreshIntentLauncher =
             registerForActivityResult(ActivityResultContracts.StartActivityForResult())
-            { binding.recyclerView.adapter?.notifyDataSetChanged() }
+            { loadLandmarks() }
+    }
+
+    private fun loadLandmarks() {
+        showLandmarks(app.landmarks.findAll())
+    }
+
+    fun showLandmarks (landmarks: List<LandmarkModel>) {
+        binding.recyclerView.adapter = LandmarkAdapter(landmarks, this)
+        binding.recyclerView.adapter?.notifyDataSetChanged()
     }
 }
