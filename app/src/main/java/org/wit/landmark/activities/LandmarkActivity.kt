@@ -8,12 +8,15 @@ import android.view.Menu
 import android.view.MenuItem
 import androidx.activity.result.ActivityResultLauncher
 import androidx.activity.result.contract.ActivityResultContracts
+import com.google.android.gms.maps.GoogleMap
+import com.google.android.gms.maps.model.Marker
 import com.google.android.material.snackbar.Snackbar
 import com.squareup.picasso.MemoryPolicy
 import com.squareup.picasso.Picasso
 import org.wit.landmark.R
 import org.wit.landmark.databinding.ActivityLandmarkBinding
 import org.wit.landmark.main.MainApp
+import org.wit.landmark.models.Location
 import org.wit.landmark.models.LandmarkModel
 import org.wit.landmark.showImagePicker
 import timber.log.Timber
@@ -25,7 +28,8 @@ class LandmarkActivity : AppCompatActivity() {
     var landmark = LandmarkModel()
     lateinit var app: MainApp
     private lateinit var imageIntentLauncher : ActivityResultLauncher<Intent>
-    val IMAGE_REQUEST = 1
+    private lateinit var mapIntentLauncher : ActivityResultLauncher<Intent>
+
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -39,7 +43,7 @@ class LandmarkActivity : AppCompatActivity() {
 
         app = application as MainApp
 
-        i("Historical Landmarks of Ireland Activated...")
+        i("Historical Landmarks of Ireland Booting...")
 
         if (intent.hasExtra("landmark_edit")) {
             edit = true
@@ -77,7 +81,20 @@ class LandmarkActivity : AppCompatActivity() {
             showImagePicker(imageIntentLauncher)
         }
 
+        binding.landmarkLocation.setOnClickListener {
+            val location = Location(52.245696, -7.139102, 15f)
+            if (landmark.zoom != 0f) {
+                location.lat =  landmark.lat
+                location.lng = landmark.lng
+                location.zoom = landmark.zoom
+            }
+            val launcherIntent = Intent(this, MapActivity::class.java)
+                .putExtra("location", location)
+            mapIntentLauncher.launch(launcherIntent)
+        }
+
         registerImagePickerCallback()
+        registerMapCallback()
     }
 
     override fun onCreateOptionsMenu(menu: Menu): Boolean {
@@ -107,6 +124,26 @@ class LandmarkActivity : AppCompatActivity() {
                                 .load(landmark.image)
                                 .into(binding.landmarkImage)
                             binding.chooseImage.setText(R.string.change_landmark_image)
+                        } // end of if
+                    }
+                    RESULT_CANCELED -> { } else -> { }
+                }
+            }
+    }
+
+    private fun registerMapCallback() {
+        mapIntentLauncher =
+            registerForActivityResult(ActivityResultContracts.StartActivityForResult())
+            { result ->
+                when (result.resultCode) {
+                    RESULT_OK -> {
+                        if (result.data != null) {
+                            i("Got Location ${result.data.toString()}")
+                            val location = result.data!!.extras?.getParcelable<Location>("location")!!
+                            i("Location == $location")
+                            landmark.lat = location.lat
+                            landmark.lng = location.lng
+                            landmark.zoom = location.zoom
                         } // end of if
                     }
                     RESULT_CANCELED -> { } else -> { }
