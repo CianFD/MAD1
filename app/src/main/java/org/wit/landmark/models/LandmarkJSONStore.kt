@@ -42,7 +42,22 @@ class LandmarkJSONStore(private val context: Context) : LandmarkStore {
 
 
     override fun update(landmark: LandmarkModel) {
-        // todo
+        val landmarksList = findAll() as ArrayList<LandmarkModel>
+        var foundLandmark: LandmarkModel? = landmarksList.find { p -> p.id == landmark.id }
+        if (foundLandmark != null) {
+            foundLandmark.title = landmark.title
+            foundLandmark.description = landmark.description
+            foundLandmark.image = landmark.image
+            foundLandmark.lat = landmark.lat
+            foundLandmark.lng = landmark.lng
+            foundLandmark.zoom = landmark.zoom
+        }
+        serialize()
+    }
+
+    override fun delete(landmark: LandmarkModel) {
+        landmarks.remove(landmark)
+        serialize()
     }
 
     private fun serialize() {

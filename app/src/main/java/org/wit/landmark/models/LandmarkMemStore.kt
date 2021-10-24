@@ -35,6 +35,10 @@ class LandmarkMemStore : LandmarkStore {
         }
     }
 
+    override fun delete(landmark: LandmarkModel) {
+        landmarks.remove(landmark)
+    }
+
     private fun logAll() {
         landmarks.forEach { i("$it") }
     }
