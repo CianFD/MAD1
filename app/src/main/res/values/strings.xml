@@ -1,5 +1,5 @@
 <resources>
-    <string name="app_name">HLoI</string>
+    <string name="app_name">Landmarks of Ireland</string>
     <string name="button_addLandmark">Add Landmark</string>
     <string name="hint_landmarkTitle">Landmark Title</string>
     <string name="hint_landmarkDescription">Description </string>
